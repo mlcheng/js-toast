@@ -223,6 +223,7 @@ iqwerty.toast = (function() {
 			 */
 			defaultStyle: ""+
 				"background: rgba(0, 0, 0, .85);" +
+				"box-shadow: 0 0 10px rgba(0, 0, 0, .8);" +
 				"z-index: 99999;" +
 				"border-radius: 3px;" +
 				"color: rgba(255, 255, 255, .9);" +
