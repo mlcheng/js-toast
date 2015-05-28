@@ -73,15 +73,27 @@ iqwerty.toast = (function() {
 			_textStage = textStage;
 			return this;
 		};
-
 	};
+
+	/**
+	 * Specifies whether or not the stylesheet exists in the document head
+	 * @type {Boolean}
+	 */
+	Toast.prototype.styleExists = false;
 
 	/**
 	 * Initialize the animations for the toast, including fade/slide in, and fade/slide out. Add the styles to a style element in the head.
 	 * @return Returns nothing
 	 */
 	Toast.prototype.initializeAnimations = function() {
+		// don't do anything if styles/animations already exist inside document
+		if(Toast.prototype.styleExists) return;
+
+
+
 		var style = document.createElement("style");
+		style.classList.add(iqwerty.toast.identifiers.CLASS_STYLESHEET);
+
 		style.innerHTML = "." + iqwerty.toast.identifiers.CLASS_SLIDE_IN +
 		"{opacity: 1; bottom: 10%;}" +
 
@@ -91,7 +103,12 @@ iqwerty.toast = (function() {
 		"." + iqwerty.toast.identifiers.CLASS_ANIMATED +
 		"{transition: opacity " + iqwerty.toast.style.TOAST_ANIMATION_SPEED + "ms, bottom " + iqwerty.toast.style.TOAST_ANIMATION_SPEED + "ms;}";
 
+
+		// add the styles to the document head
 		document.head.appendChild(style);
+
+		// specify in the prototype that the style exists in the document already, to avoid creating styles again next time
+		Toast.prototype.styleExists = true;
 	};
 
 	/**
@@ -230,6 +247,7 @@ iqwerty.toast = (function() {
 		 * @type {Object}
 		 */
 		identifiers: {
+			CLASS_STYLESHEET: "iqwerty_toast_stylesheet",
 			CLASS_ANIMATED: "iqwerty_toast_animated",
 			CLASS_SLIDE_IN: "iqwerty_toast_slide_in",
 			CLASS_SLIDE_OUT: "iqwerty_toast_slide_out"
