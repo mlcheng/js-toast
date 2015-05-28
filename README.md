@@ -2,6 +2,8 @@
 
 This is a small JavaScript library that produces a toast message. Toasts are small, unobtrusive notifictions to alert the user of something. This toast slides in from the bottom of the page, stays for a specified amount of time, and then slides away. This is much friendlier than using the `alert()` function in JavaScript.
 
+A demo is available on my [playground](http://www.michaelcheng.us/playground/lib-js/toast/).
+
 ## Usage
 Usage is extremely simple, but advanced customization can also be done. For starters, just create a toast
 
