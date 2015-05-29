@@ -73,6 +73,13 @@ iqwerty.toast = (function() {
 			_textStage = textStage;
 			return this;
 		};
+
+
+		/**
+		 * Specifies whether or not the style is user defined. If stylize() is called by the user, the toast will not use default styles. Otherwise, default styles will be applied
+		 * @type {Boolean}
+		 */
+		this.stylized = false;
 	};
 
 	/**
@@ -139,10 +146,19 @@ iqwerty.toast = (function() {
 			this.generate();
 		}
 
+
+
+		// stylize the toast if it isn't user defined
+		if(!this.stylized) {
+			this.stylize();
+		}
+
+
+
 		var body = document.body;
 		var before = body.firstChild;
 
-		// add the animated and initial class (shows at bottom)
+		// use classes to animate the toast
 		this.getToastStage().classList.add(iqwerty.toast.identifiers.CLASS_ANIMATED);
 		this.getToastStage().classList.add(iqwerty.toast.identifiers.CLASS_SLIDE_OUT);
 
@@ -158,7 +174,7 @@ iqwerty.toast = (function() {
 
 
 
-		// hide the toast after the timeout
+		// hide the toast after the specified timeout
 		setTimeout(this.hide.bind(this), this.getDuration());
 
 		return this;
@@ -206,6 +222,10 @@ iqwerty.toast = (function() {
 				toastStage.style[value] = style[value];
 			});
 		}
+
+
+
+		this.stylized = true;
 
 
 		return this;
