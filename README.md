@@ -13,22 +13,18 @@ Then, set the text for the toast
 
 	toast.setText("This is a toast!");
 
-Next, stylize the toast with default styles
-
-	toast.stylize();
-
 Finally, show the toast
 
 	toast.show();
 
-I really like method chaining, so these methods can be chained like `toast.setText(...).stylize().show();` if you wish.
+I really like method chaining, so these methods can be chained like `toast.setText(...).show();` if you wish.
 
 ## Advanced customization
 
 The toast is easy to use, and it looks great by default. However, it can also be customized to your liking.
 
 ### Styles
-The toast style can be customized by specifying a style object inside `stylize()`
+The toast style can be customized by specifying a style object using `stylize()`
 
 	toast.stylize({
 		background: "pink",
