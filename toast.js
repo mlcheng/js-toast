@@ -74,6 +74,19 @@ iqwerty.toast = (function() {
 			return this;
 		};
 
+		/**
+		 * A callback when the toast is hidden
+		 * @type {Function}
+		 */
+		var _onHideCallback = null;
+		this.getOnHideCallback = function() {
+			return _onHideCallback;
+		};
+		this.setOnHideCallback = function(onHideCallback) {
+			_onHideCallback = onHideCallback;
+			return this;
+		};
+
 
 		/**
 		 * Specifies whether or not the style is user defined. If stylize() is called by the user, the toast will not use default styles. Otherwise, default styles will be applied
@@ -131,6 +144,9 @@ iqwerty.toast = (function() {
 		this.setToastStage(toastStage);
 		this.setTextStage(textStage);
 
+		toastStage = null;
+		textStage = null;
+
 		// initialize animation styles for the toast
 		this.initializeAnimations();
 
@@ -156,14 +172,14 @@ iqwerty.toast = (function() {
 
 
 		var body = document.body;
-		var before = body.firstChild;
 
 		// use classes to animate the toast
 		this.getToastStage().classList.add(iqwerty.toast.identifiers.CLASS_ANIMATED);
 		this.getToastStage().classList.add(iqwerty.toast.identifiers.CLASS_SLIDE_OUT);
 
 		// insert into the dom
-		body.insertBefore(this.getToastStage(), before);
+		body.insertBefore(this.getToastStage(), body.firstChild);
+		body = null;
 		
 		// a hack to "redraw"; without this, the next class will get immediately applied without transitioning
 		this.getToastStage().offsetHeight;
@@ -177,7 +193,7 @@ iqwerty.toast = (function() {
 		// hide the toast after the specified timeout
 		setTimeout(this.hide.bind(this), this.getDuration());
 
-		return this;
+		//return this;
 	};
 
 	/**
@@ -196,9 +212,12 @@ iqwerty.toast = (function() {
 			this.setToastStage(null);
 			this.setText(null);
 			this.setTextStage(null);
+			if(this.getOnHideCallback() != null) {
+				this.getOnHideCallback();
+			}
 		}.bind(this), iqwerty.toast.style.TOAST_ANIMATION_SPEED);
 
-		return this;
+		//return this;
 	};
 
 	/**
@@ -223,6 +242,9 @@ iqwerty.toast = (function() {
 			});
 		}
 
+
+
+		toastStage = null;
 
 
 		this.stylized = true;
