@@ -40,10 +40,7 @@ iqwerty.toast = (function() {
 		const CLASS_TOAST_GONE = "iqwerty_toast_gone";
 		const CLASS_TOAST_VISIBLE = "iqwerty_toast_visible";
 		const CLASS_TOAST_ANIMATED = "iqwerty_toast_animated";
-
-		if(arguments.length == 1) {
-			options = {};
-		}
+		var options = options == undefined ? {} : options;
 
 		/**
 		 * The default settings for the toast, including styles and timing options
