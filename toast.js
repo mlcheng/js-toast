@@ -63,7 +63,7 @@ iqwerty.toast = (function() {
 				"right": "0"
 			},
 			settings: {
-				duration: 3000
+				duration: 4000
 			}
 		};
 
@@ -150,9 +150,9 @@ iqwerty.toast = (function() {
 			 */
 			(function stylize() {
 				var toastStage = getToastStage();
-				var s = Object.keys(_defaultSettings.style);
+				var s = Object.keys(options.style);
 				s.forEach(function(value, index, array) {
-					toastStage.style[value] = _defaultSettings.style[value];
+					toastStage.style[value] = options.style[value];
 				});
 
 				toastStage = null;
@@ -181,7 +181,7 @@ iqwerty.toast = (function() {
 
 
 			// Hide the Toast after the specified time
-			setTimeout(hide, _defaultSettings.settings.duration);
+			setTimeout(hide, options.settings.duration);
 		})();
 
 		/**
