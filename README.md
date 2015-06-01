@@ -5,35 +5,45 @@ This is a small JavaScript library that produces a toast message. Toasts are sma
 A demo is available on my [playground](http://www.michaelcheng.us/playground/lib-js/toast/).
 
 ## Usage
-Usage is extremely simple, but advanced customization can also be done. For starters, just create a toast
+Usage is extremely simple, but advanced customization can also be done. For starters, a toast can be created on a button click
 
-	var toast = new iqwerty.toast.Toast();
+	<input type="button" value="Toast!" onclick="showAToast();">
 
-Then, set the text for the toast
+Where the `showAToast()` function creates and shows a toast
 
-	toast.setText("This is a toast!");
+	function showAToast() {
+		iqwerty.toast.Toast('Hello!');
+	}
 
-Finally, show the toast
-
-	toast.show();
-
-I really like method chaining, so these methods can be chained like `toast.setText(...).show();` if you wish.
+This shows a toast with default settings.
 
 ## Advanced customization
 
 The toast is easy to use, and it looks great by default. However, it can also be customized to your liking.
 
 ### Styles
-The toast style can be customized by specifying a style object using `stylize()`
+The toast style can be customized by specifying a style in the options parameter
 
-	toast.stylize({
-		background: "pink",
-		color: "#ff00ff"
-	});
+	var options = {
+		style: {
+			background: "pink",
+			color: "black"
+		}
+	};
+
+	iqwerty.toast.Toast('Hello!', options);
+
+The styles are in CSS-ish syntax
 
 ### Duration
-The duration of the toast (the time that the toast stays on the screen) is set to 3000ms (3s) by default, but you can change this if you wish
+The duration of the toast (the time that the toast stays on the screen) is set to 4000ms (4s) by default, but you can change this if you wish
 
-	toast.setDuration(5000); // 5 seconds
+	var options = {
+		settings: {
+			duration: 5000
+		}
+	};
 
-Make sure to set the duration ***before*** you `show()` the toast!
+	iqwerty.toast.Toast('Hello!', options);
+
+Have fun!

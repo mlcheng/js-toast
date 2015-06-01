@@ -41,6 +41,9 @@ iqwerty.toast = (function() {
 		const CLASS_TOAST_VISIBLE = "iqwerty_toast_visible";
 		const CLASS_TOAST_ANIMATED = "iqwerty_toast_animated";
 
+		if(arguments.length == 1) {
+			options = {};
+		}
 
 		/**
 		 * The default settings for the toast, including styles and timing options
