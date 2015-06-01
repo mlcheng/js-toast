@@ -2,7 +2,7 @@
 
   "toast.js"
 
-  Created by Michael Cheng on 05/27/2015 14:24
+  Created by Michael Cheng on 05/31/2015 22:34
             http://michaelcheng.us/
             michael@michaelcheng.us
             --All Rights Reserved--
@@ -11,289 +11,215 @@
 
 "use strict";
 
-
-/**
- * The iqwerty namespace
- */
 var iqwerty = iqwerty || {};
 
-/**
- * Toasts are here
- */
 iqwerty.toast = (function() {
-	function Toast() {
+
+	/**
+	 * Toast object
+	 * @param {String} text    The text to display in the toast
+	 * @param {Object} options Options for the toast. The options object has the following structure
+	 *
+	 * var opt = {
+	 * 		style: {
+	 * 			//just css styles in here, like:
+	 * 			"background": "pink"
+	 * 			//...
+	 * 		},
+	 * 		settings: {
+	 * 			duration: 3000
+	 * 		}
+	 * }
+	 *
+	 * The default duration is 3000ms, or 3 seconds. This is how long the toast stays on screen. By default, the toast will show for 3 seconds and then slide away.
+	 */
+	function Toast(text, options) {
+		const TOAST_ANIMATION_SPEED = 400; // the fade in/out speed
+
+		// some toast identifiers
+		const CLASS_TOAST_GONE = "iqwerty_toast_gone";
+		const CLASS_TOAST_VISIBLE = "iqwerty_toast_visible";
+		const CLASS_TOAST_ANIMATED = "iqwerty_toast_animated";
+
+
 		/**
-		 * The duration of the toast, in milliseconds
-		 * @type {Number}
+		 * The default settings for the toast, including styles and timing options
+		 * @type {Object}
 		 */
-		var _duration = 3000;
-		this.getDuration = function() {
-			return _duration;
-		};
-		this.setDuration = function(time) {
-			_duration = time;
-			return this;
+		var _defaultSettings = {
+			style: {
+				"background": "rgba(0, 0, 0, .85)",
+				"box-shadow": "0 0 10px rgba(0, 0, 0, .8)",
+				"z-index": "99999",
+				"border-radius": "3px",
+				"color": "rgba(255, 255, 255, .9)",
+				"padding": "10px 15px",
+				"max-width": "40%",
+				"word-break": "keep-all",
+				"margin": "0 auto",
+				"text-align": "center",
+				"position": "fixed",
+				"left": "0",
+				"right": "0"
+			},
+			settings: {
+				duration: 3000
+			}
 		};
 
 		/**
-		 * The toast element
+		 * Apply the settings for the toast. If settings are customized, they are merged here.
+		 * @return Returns nothing
+		 */
+		function setOptions() {
+			/**
+			 * Merge the options recursively and set them globally.
+			 * @param  {Object} initial The initial default settings
+			 * @param  {Object} custom  The customized settings object
+			 * @return {Object}         The merged settings object
+			 */
+			options = (function mergeOptions(initial, custom) {
+				var merged = custom;
+				for(var prop in initial) {
+					if(merged.hasOwnProperty(prop)) {
+						if(initial[prop] != null && initial[prop].constructor == Object) {
+							merged[prop] = mergeOptions(initial[prop], merged[prop]);
+						}
+					} else {
+						merged[prop] = initial[prop];
+					}
+				}
+				return merged;
+			})(_defaultSettings, options);
+		};
+
+		/**
+		 * If the stylesheet doesn't exist in the page, create it. The stylesheet contains animation settings for the toast.
+		 * @return  Returns nothing
+		 */
+		function initializeStyles() {
+			if(Toast.prototype.styleExists) return;
+
+			var style = document.createElement("style");
+			style.innerHTML = "." + CLASS_TOAST_GONE +
+			"{opacity: 0; bottom: -10%;}" +
+
+			"." + CLASS_TOAST_VISIBLE +
+			"{opacity: 1; bottom: 10%;}" +
+
+			"." + CLASS_TOAST_ANIMATED +
+			"{transition: opacity " + TOAST_ANIMATION_SPEED + "ms, bottom " + TOAST_ANIMATION_SPEED + "ms;}";
+
+			document.head.appendChild(style);
+			style = null;
+
+			// Notify that the stylesheet exists to avoid creating more
+			Toast.prototype.styleExists = true;
+		};
+
+		/**
+		 * The Toast stage. This is the HTML element of the toast.
 		 * @type {Object}
 		 */
 		var _toastStage = null;
-		this.getToastStage = function() {
+		function getToastStage() {
 			return _toastStage;
 		};
-		this.setToastStage = function(toastStage) {
+		function setToastStage(toastStage) {
 			_toastStage = toastStage;
-			return this;
 		};
 
 		/**
-		 * The text inside the toast
-		 * @type {String}
+		 * Generate the toast element and apply the styles from the settings.
+		 * @return  Returns nothing
 		 */
-		var _text = null;
-		this.getText = function() {
-			return _text;
-		};
-		this.setText = function(text) {
-			_text = text;
-			return this;
+		function generate() {
+			var toastStage = document.createElement("div");
+			var textStage = document.createTextNode(text);
+
+			toastStage.appendChild(textStage);
+
+			setToastStage(toastStage);
+			toastStage = null;
+			textStage = null;
+
+
+			/**
+			 * Stylize the toast
+			 * @return  Returns nothing
+			 */
+			(function stylize() {
+				var toastStage = getToastStage();
+				var s = Object.keys(_defaultSettings.style);
+				s.forEach(function(value, index, array) {
+					toastStage.style[value] = _defaultSettings.style[value];
+				});
+
+				toastStage = null;
+				s = null;
+			})();
+		}
+
+		/**
+		 * Show the Toast. Classes are modified to allow CSS3 animations
+		 * @return  Returns nothing
+		 */
+		(function show() {
+			setOptions();
+			initializeStyles();
+			generate();
+
+			var toastStage = getToastStage();
+			toastStage.classList.add(CLASS_TOAST_ANIMATED);
+			toastStage.classList.add(CLASS_TOAST_GONE);
+			document.body.insertBefore(toastStage, document.body.firstChild);
+			toastStage.offsetHeight;
+			toastStage.classList.remove(CLASS_TOAST_GONE);
+			toastStage.classList.add(CLASS_TOAST_VISIBLE);
+
+			var toastStage = null;
+
+
+			// Hide the Toast after the specified time
+			setTimeout(hide, _defaultSettings.settings.duration);
+		})();
+
+		/**
+		 * Animate the Toast away. Slide/fade out.
+		 * @return  Returns nothing
+		 */
+		function hide() {
+			var toastStage = getToastStage();
+			toastStage.classList.remove(CLASS_TOAST_VISIBLE);
+			toastStage.classList.add(CLASS_TOAST_GONE);
+			toastStage = null;
+
+			// Destroy the Toast element after animations end
+			setTimeout(destroy, TOAST_ANIMATION_SPEED);
 		};
 
 		/**
-		 * The text element inside the toast
-		 * @type {Object}
+		 * Remove the Toast from the DOM and perform some cleanup
+		 * @return  Returns nothing
 		 */
-		var _textStage = null;
-		this.getTextStage = function() {
-			return _textStage;
-		};
-		this.setTextStage = function(textStage) {
-			_textStage = textStage;
-			return this;
-		};
+		function destroy() {
+			var toastStage = getToastStage();
+			document.body.removeChild(toastStage);
 
-		/**
-		 * A callback when the toast is hidden
-		 * @type {Function}
-		 */
-		var _onHideCallback = null;
-		this.getOnHideCallback = function() {
-			return _onHideCallback;
+			toastStage = null;
+			setToastStage(null);
 		};
-		this.setOnHideCallback = function(onHideCallback) {
-			_onHideCallback = onHideCallback;
-			return this;
-		};
-
-
-		/**
-		 * Specifies whether or not the style is user defined. If stylize() is called by the user, the toast will not use default styles. Otherwise, default styles will be applied
-		 * @type {Boolean}
-		 */
-		this.stylized = false;
 	};
 
 	/**
-	 * Specifies whether or not the stylesheet exists in the document head
+	 * Specifies whether or not the inline stylesheet for CSS3 animations exists. This is used to avoid creating unnecessary multiple stylesheets in the page
 	 * @type {Boolean}
 	 */
 	Toast.prototype.styleExists = false;
 
-	/**
-	 * Initialize the animations for the toast, including fade/slide in, and fade/slide out. Add the styles to a style element in the head.
-	 * @return Returns nothing
-	 */
-	Toast.prototype.initializeAnimations = function() {
-		// don't do anything if styles/animations already exist inside document
-		if(Toast.prototype.styleExists) return;
-
-
-
-		var style = document.createElement("style");
-		style.classList.add(iqwerty.toast.identifiers.CLASS_STYLESHEET);
-
-		style.innerHTML = "." + iqwerty.toast.identifiers.CLASS_SLIDE_IN +
-		"{opacity: 1; bottom: 10%;}" +
-
-		"." + iqwerty.toast.identifiers.CLASS_SLIDE_OUT +
-		"{opacity: 0; bottom: -10%;}" +
-
-		"." + iqwerty.toast.identifiers.CLASS_ANIMATED +
-		"{transition: opacity " + iqwerty.toast.style.TOAST_ANIMATION_SPEED + "ms, bottom " + iqwerty.toast.style.TOAST_ANIMATION_SPEED + "ms;}";
-
-
-		// add the styles to the document head
-		document.head.appendChild(style);
-
-		// specify in the prototype that the style exists in the document already, to avoid creating styles again next time
-		Toast.prototype.styleExists = true;
-	};
-
-	/**
-	 * Generate the toast and set the stages
-	 * @return {Object} Returns the Toast object
-	 */
-	Toast.prototype.generate = function() {
-		var toastStage = document.createElement("div");
-		var textStage = document.createElement("span");
-		textStage.innerHTML = this.getText();
-		toastStage.appendChild(textStage);
-
-		this.setToastStage(toastStage);
-		this.setTextStage(textStage);
-
-		toastStage = null;
-		textStage = null;
-
-		// initialize animation styles for the toast
-		this.initializeAnimations();
-
-		return this;
-	};
-
-	/**
-	 * Show the toast
-	 * @return {Object} Returns the Toast object
-	 */
-	Toast.prototype.show = function() {
-		if(this.getToastStage() == null) {
-			this.generate();
-		}
-
-
-
-		// stylize the toast if it isn't user defined
-		if(!this.stylized) {
-			this.stylize();
-		}
-
-
-
-		var body = document.body;
-
-		// use classes to animate the toast
-		this.getToastStage().classList.add(iqwerty.toast.identifiers.CLASS_ANIMATED);
-		this.getToastStage().classList.add(iqwerty.toast.identifiers.CLASS_SLIDE_OUT);
-
-		// insert into the dom
-		body.insertBefore(this.getToastStage(), body.firstChild);
-		body = null;
-		
-		// a hack to "redraw"; without this, the next class will get immediately applied without transitioning
-		this.getToastStage().offsetHeight;
-
-		// switch classes; slide the toast up
-		this.getToastStage().classList.add(iqwerty.toast.identifiers.CLASS_SLIDE_IN);
-		this.getToastStage().classList.remove(iqwerty.toast.identifiers.CLASS_SLIDE_OUT);
-
-
-
-		// hide the toast after the specified timeout
-		setTimeout(this.hide.bind(this), this.getDuration());
-
-		//return this;
-	};
-
-	/**
-	 * Hide the toast
-	 * @return {Object} Returns the Toast object
-	 */
-	Toast.prototype.hide = function() {
-		if(this.getToastStage() == null) return;
-
-		this.getToastStage().classList.remove(iqwerty.toast.identifiers.CLASS_SLIDE_IN);
-		this.getToastStage().classList.add(iqwerty.toast.identifiers.CLASS_SLIDE_OUT);
-
-
-		setTimeout(function() {
-			document.body.removeChild(this.getToastStage());
-			this.setToastStage(null);
-			this.setText(null);
-			this.setTextStage(null);
-			if(this.getOnHideCallback() != null) {
-				this.getOnHideCallback();
-			}
-		}.bind(this), iqwerty.toast.style.TOAST_ANIMATION_SPEED);
-
-		//return this;
-	};
-
-	/**
-	 * Stylize the toast with defaults, or specify an object that contains the custom style
-	 * @param  {Object} style A literal object containing the custom style, e.g. toast.stylize({background: "pink", color: "#ff00ff"})
-	 * @return {Object}       Returns the Toast object
-	 */
-	Toast.prototype.stylize = function(style) {
-		if(this.getToastStage() == null) {
-			this.generate();
-		}
-
-		var toastStage = this.getToastStage();
-		toastStage.setAttribute("style", iqwerty.toast.style.defaultStyle);
-
-
-		// apply custom styles if specified
-		if(arguments.length == 1) {
-			var s = Object.keys(style);
-			s.forEach(function(value, index, array) {
-				toastStage.style[value] = style[value];
-			});
-		}
-
-
-
-		toastStage = null;
-
-
-		this.stylized = true;
-
-
-		return this;
-	};
-
-	
 	return {
-		Toast: Toast,
-
-
-		style: {
-			/**
-			 * The default styles for the toast. Override these in Toast.stylize()
-			 * @type {String}
-			 */
-			defaultStyle: ""+
-				"background: rgba(0, 0, 0, .85);" +
-				"box-shadow: 0 0 10px rgba(0, 0, 0, .8);" +
-				"z-index: 99999;" +
-				"border-radius: 3px;" +
-				"color: rgba(255, 255, 255, .9);" +
-				"padding: 10px 15px;" +
-				"max-width: 40%;" +
-				"word-break: keep-all;" +
-				"margin: 0 auto;" +
-				"text-align: center;" +
-				"position: fixed;" +
-				"left: 0;" +
-				"right: 0;",
-
-			/**
-			 * The speed of the toast animation, i.e. how long it takes to fade in/out. Preferably not more than 500
-			 * @type {Number}
-			 */
-			TOAST_ANIMATION_SPEED: 400
-		},
-
-		/**
-		 * A list of constants that define some identifiers for the Toast
-		 * @type {Object}
-		 */
-		identifiers: {
-			CLASS_STYLESHEET: "iqwerty_toast_stylesheet",
-			CLASS_ANIMATED: "iqwerty_toast_animated",
-			CLASS_SLIDE_IN: "iqwerty_toast_slide_in",
-			CLASS_SLIDE_OUT: "iqwerty_toast_slide_out"
+		Toast: function(text, options) {
+			Toast(text, options);
 		}
-	};
+	}
 })();
