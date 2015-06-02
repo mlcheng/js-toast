@@ -5,7 +5,7 @@ This is a small JavaScript library that produces a toast message. Toasts are sma
 A demo is available on my [playground](http://www.michaelcheng.us/playground/lib-js/toast/).
 
 ## Usage
-Usage is extremely simple, but advanced customization can also be done. For starters, a toast can be created on a button click
+Usage is extremely simple, but advanced customization can also be done. For starters, a toast can be created when a button is clicked
 
 	<input type="button" value="Toast!" onclick="showAToast();">
 
@@ -15,7 +15,7 @@ Where the `showAToast()` function creates and shows a toast
 		iqwerty.toast.Toast('Hello!');
 	}
 
-This shows a toast with default settings.
+This shows a toast with default settings
 
 ## Advanced customization
 
