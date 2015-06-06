@@ -34,12 +34,14 @@ iqwerty.toast = (function() {
 	 * The default duration is 3000ms, or 3 seconds. This is how long the toast stays on screen. By default, the toast will show for 3 seconds and then slide away.
 	 */
 	function Toast(text, options) {
-		const TOAST_ANIMATION_SPEED = 400; // the fade in/out speed
-
+		// define some constant settings
+		var TOAST_ANIMATION_SPEED = 400; // the fade in/out speed
 		// some toast identifiers
-		const CLASS_TOAST_GONE = "iqwerty_toast_gone";
-		const CLASS_TOAST_VISIBLE = "iqwerty_toast_visible";
-		const CLASS_TOAST_ANIMATED = "iqwerty_toast_animated";
+		var CLASS_TOAST_GONE = "iqwerty_toast_gone";
+		var CLASS_TOAST_VISIBLE = "iqwerty_toast_visible";
+		var CLASS_TOAST_ANIMATED = "iqwerty_toast_animated";
+
+
 		var options = options == undefined ? {} : options;
 
 		/**
