@@ -7,13 +7,17 @@ A demo is available on my [playground](http://www.michaelcheng.us/playground/lib
 ## Usage
 Usage is extremely simple, but advanced customization can also be done. For starters, a toast can be created when a button is clicked
 
-	<input type="button" value="Toast!" onclick="showAToast();">
+```html
+<input type="button" value="Toast!" onclick="showAToast();">
+```
 
 Where the `showAToast()` function creates and shows a toast
 
-	function showAToast() {
-		iqwerty.toast.Toast('Hello!');
-	}
+```javascript
+function showAToast() {
+	iqwerty.toast.Toast('Hello!');
+}
+```
 
 This shows a toast with default settings
 
@@ -24,26 +28,30 @@ The toast is easy to use, and it looks great by default. However, it can also be
 ### Styles
 The toast style can be customized by specifying a style in the options parameter
 
-	var options = {
-		style: {
-			background: "pink",
-			color: "black"
-		}
-	};
+```javascript
+var options = {
+	style: {
+		background: "pink",
+		color: "black"
+	}
+};
 
-	iqwerty.toast.Toast('Hello!', options);
+iqwerty.toast.Toast('Hello!', options);
+```
 
 The styles are in CSS-ish syntax
 
 ### Duration
 The duration of the toast (the time that the toast stays on the screen) is set to 4000ms (4s) by default, but you can change this if you wish
 
-	var options = {
-		settings: {
-			duration: 5000
-		}
-	};
+```javascript
+var options = {
+	settings: {
+		duration: 5000
+	}
+};
 
-	iqwerty.toast.Toast('Hello!', options);
+iqwerty.toast.Toast('Hello!', options);
+```
 
 Have fun!
