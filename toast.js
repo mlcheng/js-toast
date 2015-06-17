@@ -15,8 +15,14 @@ var iqwerty = iqwerty || {};
 
 iqwerty.toast = (function() {
 
+	/**
+	 * The main Toast object
+	 * @param {String} text    The text to put inside the Toast
+	 * @param {Object} options Optional; the Toast options. See Toast.prototype.DEFAULT_SETTINGS for more information
+	 */
 	function Toast(text, options) {
 		if(getToastStage() != null) {
+			// If there is already a Toast being shown, put this Toast in the queue to show later
 			Toast.prototype.toastQueue.push({text: text, options: options});
 		} else {
 			var options = options == undefined ? {} : options;
@@ -25,6 +31,20 @@ iqwerty.toast = (function() {
 
 			Toast.prototype.show(text);
 		}
+	};
+
+
+	/**
+	 * The toastStage. This is the HTML element in which the toast resides
+	 * Getter and setter methods are available privately
+	 * @type {Element}
+	 */
+	var _toastStage = null;
+	function setToastStage(toastStage) {
+		_toastStage = toastStage;
+	};
+	function getToastStage() {
+		return _toastStage;
 	};
 
 
@@ -40,6 +60,7 @@ iqwerty.toast = (function() {
 	Toast.prototype.CLASS_TOAST_GONE = "iqwerty_toast_gone";
 	Toast.prototype.CLASS_TOAST_VISIBLE = "iqwerty_toast_visible";
 	Toast.prototype.CLASS_TOAST_ANIMATED = "iqwerty_toast_animated";
+
 
 	/**
 	 * The default Toast settings
@@ -66,14 +87,30 @@ iqwerty.toast = (function() {
 		}
 	};
 
-	Toast.prototype.styleExists = false;
-
-	Toast.prototype.options = {};
-
-	Toast.prototype.toastQueue = [];
 
 	/**
-	 * Merge the options
+	 * Specifies whether or not the inline style in the <head> exists. It only needs to be added once to a page
+	 * @type {Boolean}
+	 */
+	Toast.prototype.styleExists = false;
+
+
+	/**
+	 * The user defined options merged with the DEFAULT_SETTINGS
+	 * @type {Object}
+	 */
+	Toast.prototype.options = {};
+
+
+	/**
+	 * The queue of Toasts waiting to be shown
+	 * @type {Array}
+	 */
+	Toast.prototype.toastQueue = [];
+
+
+	/**
+	 * Merge the DEFAULT_SETTINGS with the user defined options if specified
 	 * @param  {Object} options The user defined options
 	 */
 	Toast.prototype.mergeOptions = function(initialOptions, customOptions) {
@@ -87,11 +124,14 @@ iqwerty.toast = (function() {
 				merged[prop] = initialOptions[prop];
 			}
 		}
-
-
 		return merged;
 	};
 
+
+	/**
+	 * Add the inline stylesheet to the <head>
+	 * These inline styles are needed for animation purposes.
+	 */
 	Toast.prototype.initializeStyles = function() {
 		if(Toast.prototype.styleExists) return;
 
@@ -112,14 +152,11 @@ iqwerty.toast = (function() {
 		Toast.prototype.styleExists = true;
 	};
 
-	var _toastStage = null;
-	function setToastStage(toastStage) {
-		_toastStage = toastStage;
-	};
-	function getToastStage() {
-		return _toastStage;
-	};
 
+	/**
+	 * Generate the Toast with the specified text.
+	 * @param  {String} text The text to show inside the Toast
+	 */
 	Toast.prototype.generate = function(text) {
 		var toastStage = document.createElement("div");
 		var textStage = document.createTextNode(text);
@@ -146,6 +183,11 @@ iqwerty.toast = (function() {
 		}.bind(this))();
 	};
 
+
+	/**
+	 * Show the Toast
+	 * @param  {String} text The text to show inside the Toast
+	 */
 	Toast.prototype.show = function(text) {
 		this.initializeStyles();
 		this.generate(text);
@@ -154,7 +196,11 @@ iqwerty.toast = (function() {
 		toastStage.classList.add(this.CLASS_TOAST_ANIMATED);
 		toastStage.classList.add(this.CLASS_TOAST_GONE);
 		document.body.insertBefore(toastStage, document.body.firstChild);
-		toastStage.offsetHeight;
+
+
+		toastStage.offsetHeight; // This is a hack to get animations started. Apparently without explicitly redrawing, it'll just attach the class and no animations would be done
+
+
 		toastStage.classList.remove(this.CLASS_TOAST_GONE);
 		toastStage.classList.add(this.CLASS_TOAST_VISIBLE);
 
@@ -165,6 +211,10 @@ iqwerty.toast = (function() {
 		setTimeout(Toast.prototype.hide, Toast.prototype.options.settings.duration);
 	};
 
+
+	/**
+	 * Hide the Toast that's currently shown
+	 */
 	Toast.prototype.hide = function() {
 		var toastStage = getToastStage();
 		toastStage.classList.remove(Toast.prototype.CLASS_TOAST_VISIBLE);
@@ -175,6 +225,10 @@ iqwerty.toast = (function() {
 		setTimeout(Toast.prototype.destroy, Toast.prototype.TOAST_ANIMATION_SPEED);
 	};
 
+
+	/**
+	 * Clean up after the Toast slides away. Namely, removing the Toast from the DOM. After the Toast is cleaned up, display the next Toast in the queue if any exists
+	 */
 	Toast.prototype.destroy = function() {
 		var toastStage = getToastStage();
 		document.body.removeChild(toastStage);
