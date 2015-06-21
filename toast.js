@@ -26,10 +26,10 @@ iqwerty.toast = (function() {
 			Toast.prototype.toastQueue.push({text: text, options: options});
 		} else {
 			var options = options == undefined ? {} : options;
-			Toast.prototype.options = Toast.prototype.mergeOptions(Toast.prototype.DEFAULT_SETTINGS, options);
+			options = Toast.prototype.mergeOptions(Toast.prototype.DEFAULT_SETTINGS, options);
 
 
-			Toast.prototype.show(text);
+			Toast.prototype.show(text, options);
 		}
 	};
 
@@ -96,13 +96,6 @@ iqwerty.toast = (function() {
 
 
 	/**
-	 * The user defined options merged with the DEFAULT_SETTINGS
-	 * @type {Object}
-	 */
-	Toast.prototype.options = {};
-
-
-	/**
 	 * The queue of Toasts waiting to be shown
 	 * @type {Array}
 	 */
@@ -155,9 +148,10 @@ iqwerty.toast = (function() {
 
 	/**
 	 * Generate the Toast with the specified text.
-	 * @param  {String} text The text to show inside the Toast
+	 * @param  {String} text    The text to show inside the Toast
+	 * @param  {Object} options The options to set for the Toast
 	 */
-	Toast.prototype.generate = function(text) {
+	Toast.prototype.generate = function(text, options) {
 		var toastStage = document.createElement("div");
 		var textStage = document.createTextNode(text);
 
@@ -167,30 +161,30 @@ iqwerty.toast = (function() {
 		toastStage = null;
 		textStage = null;
 
-		/**
-		 * Stylize the toast
-		 * @return  Returns nothing
-		 */
-		(function stylize() {
-			var toastStage = getToastStage();
-			var s = Object.keys(Toast.prototype.options.style);
-			s.forEach(function(style) {
-				toastStage.style[style] = Toast.prototype.options.style[style];
-			});
+		Toast.prototype.stylize(getToastStage(), options.style)
+	};
 
-			toastStage = null;
-			s = null;
-		}.bind(this))();
+	/**
+	 * Stylize the Toast.
+	 * @param  {Element} element The HTML element to stylize
+	 * @param  {Object}  styles  An object containing the style to apply
+	 * @return                   Returns nothing
+	 */
+	Toast.prototype.stylize = function(element, styles) {
+		Object.keys(styles).forEach(function(style) {
+			element.style[style] = styles[style];
+		});
 	};
 
 
 	/**
 	 * Show the Toast
-	 * @param  {String} text The text to show inside the Toast
+	 * @param  {String} text    The text to show inside the Toast
+	 * @param  {Object} options The object containing the options for the Toast
 	 */
-	Toast.prototype.show = function(text) {
+	Toast.prototype.show = function(text, options) {
 		this.initializeStyles();
-		this.generate(text);
+		this.generate(text, options);
 		
 		var toastStage = getToastStage();
 		toastStage.classList.add(this.CLASS_TOAST_ANIMATED);
@@ -208,7 +202,7 @@ iqwerty.toast = (function() {
 
 
 		// Hide the Toast after the specified time
-		setTimeout(Toast.prototype.hide, Toast.prototype.options.settings.duration);
+		setTimeout(Toast.prototype.hide, options.settings.duration);
 	};
 
 
