@@ -129,14 +129,20 @@ iqwerty.toast = (function() {
 		if(Toast.prototype.styleExists) return;
 
 		var style = document.createElement("style");
-		style.innerHTML = "." + this.CLASS_TOAST_GONE +
-		"{opacity: 0; bottom: -10%;}" +
 
-		"." + this.CLASS_TOAST_VISIBLE +
-		"{opacity: 1; bottom: 10%;}" +
-
-		"." + this.CLASS_TOAST_ANIMATED +
-		"{transition: opacity " + this.TOAST_ANIMATION_SPEED + "ms, bottom " + this.TOAST_ANIMATION_SPEED + "ms;}";
+		style.insertAdjacentHTML("beforeend",
+			Toast.prototype.generateInlineStylesheet(this.CLASS_TOAST_GONE, {
+				"opacity": "0",
+				"bottom": "-10%"
+			}) +
+			Toast.prototype.generateInlineStylesheet(this.CLASS_TOAST_VISIBLE, {
+				"opacity": "1",
+				"bottom": "10%"
+			}) +
+			Toast.prototype.generateInlineStylesheet(this.CLASS_TOAST_ANIMATED, {
+				"transition": "opacity " + this.TOAST_ANIMATION_SPEED + "ms, bottom " + this.TOAST_ANIMATION_SPEED + "ms"
+			})
+		);
 
 		document.head.appendChild(style);
 		style = null;
@@ -174,6 +180,26 @@ iqwerty.toast = (function() {
 		Object.keys(styles).forEach(function(style) {
 			element.style[style] = styles[style];
 		});
+	};
+
+
+	/**
+	 * Generates styles to be used in an inline stylesheet. The output will be something like:
+	 * .class {background: blue;}
+	 * @param  {String} elementClass The class of the element to style
+	 * @param  {Object} styles       The style to insert into the inline stylsheet
+	 * @return {String}              The inline style as a string
+	 */
+	Toast.prototype.generateInlineStylesheet = function(elementClass, styles) {
+		var out = "." + elementClass + "{";
+
+		Object.keys(styles).forEach(function(style) {
+			out += style + ":" + styles[style] + ";";
+		});
+
+		out += "}";
+
+		return out;
 	};
 
 
