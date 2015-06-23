@@ -30,6 +30,8 @@ iqwerty.toast = (function() {
 
 
 			Toast.prototype.show(text, options);
+			
+			options = null;
 		}
 	};
 
