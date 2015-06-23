@@ -155,9 +155,9 @@ iqwerty.toast = (function() {
 	/**
 	 * Generate the Toast with the specified text.
 	 * @param  {String} text    The text to show inside the Toast
-	 * @param  {Object} options The options to set for the Toast
+	 * @param  {Object} style   The style to set for the Toast
 	 */
-	Toast.prototype.generate = function(text, options) {
+	Toast.prototype.generate = function(text, style) {
 		var toastStage = document.createElement("div");
 		var textStage = document.createTextNode(text);
 
@@ -167,7 +167,7 @@ iqwerty.toast = (function() {
 		toastStage = null;
 		textStage = null;
 
-		Toast.prototype.stylize(getToastStage(), options.style)
+		Toast.prototype.stylize(getToastStage(), style);
 	};
 
 	/**
@@ -210,7 +210,7 @@ iqwerty.toast = (function() {
 	 */
 	Toast.prototype.show = function(text, options) {
 		this.initializeStyles();
-		this.generate(text, options);
+		this.generate(text, options.style);
 		
 		var toastStage = getToastStage();
 		toastStage.classList.add(this.CLASS_TOAST_ANIMATED);
