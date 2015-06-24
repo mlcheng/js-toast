@@ -28,7 +28,6 @@ iqwerty.toast = (function() {
 			var options = options == undefined ? {} : options;
 			options = Toast.prototype.mergeOptions(Toast.prototype.DEFAULT_SETTINGS, options);
 
-
 			Toast.prototype.show(text, options);
 			
 			options = null;
@@ -259,9 +258,13 @@ iqwerty.toast = (function() {
 		setToastStage(null);
 
 
-		if(Toast.prototype.toastQueue.length != 0) {
+		if(Toast.prototype.toastQueue.length > 0) {
+			// Show the rest of the Toasts in the queue if they exist
+			
 			var toast = Toast.prototype.toastQueue.shift();
 			Toast(toast.text, toast.options);
+
+			// clean up
 			toast = null;
 		}
 	};
