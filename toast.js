@@ -41,11 +41,11 @@ iqwerty.toast = (function() {
 	 * @type {Element}
 	 */
 	var _toastStage = null;
-	function setToastStage(toastStage) {
-		_toastStage = toastStage;
-	};
 	function getToastStage() {
 		return _toastStage;
+	};
+	function setToastStage(toastStage) {
+		_toastStage = toastStage;
 	};
 
 
