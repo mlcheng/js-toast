@@ -23,7 +23,10 @@ iqwerty.toast = (function() {
 	function Toast(text, options) {
 		if(getToastStage() != null) {
 			// If there is already a Toast being shown, put this Toast in the queue to show later
-			Toast.prototype.toastQueue.push({text: text, options: options});
+			Toast.prototype.toastQueue.push({
+				text: text,
+				options: options
+			});
 		} else {
 			var options = options == undefined ? {} : options;
 			options = Toast.prototype.mergeOptions(Toast.prototype.DEFAULT_SETTINGS, options);
@@ -47,6 +50,8 @@ iqwerty.toast = (function() {
 	function setToastStage(toastStage) {
 		_toastStage = toastStage;
 	};
+
+
 
 
 	// define some Toast constants
@@ -132,15 +137,15 @@ iqwerty.toast = (function() {
 		var style = document.createElement("style");
 
 		style.insertAdjacentHTML("beforeend",
-			Toast.prototype.generateInlineStylesheet(this.CLASS_TOAST_GONE, {
+			Toast.prototype.generateInlineStylesheetRules(this.CLASS_TOAST_GONE, {
 				"opacity": "0",
 				"bottom": "-10%"
 			}) +
-			Toast.prototype.generateInlineStylesheet(this.CLASS_TOAST_VISIBLE, {
+			Toast.prototype.generateInlineStylesheetRules(this.CLASS_TOAST_VISIBLE, {
 				"opacity": "1",
 				"bottom": "10%"
 			}) +
-			Toast.prototype.generateInlineStylesheet(this.CLASS_TOAST_ANIMATED, {
+			Toast.prototype.generateInlineStylesheetRules(this.CLASS_TOAST_ANIMATED, {
 				"transition": "opacity " + this.TOAST_ANIMATION_SPEED + "ms, bottom " + this.TOAST_ANIMATION_SPEED + "ms"
 			})
 		);
@@ -191,7 +196,7 @@ iqwerty.toast = (function() {
 	 * @param  {Object} styles       The style to insert into the inline stylsheet
 	 * @return {String}              The inline style as a string
 	 */
-	Toast.prototype.generateInlineStylesheet = function(elementClass, styles) {
+	Toast.prototype.generateInlineStylesheetRules = function(elementClass, styles) {
 		var out = "." + elementClass + "{";
 
 		Object.keys(styles).forEach(function(style) {
