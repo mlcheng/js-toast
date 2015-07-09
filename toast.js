@@ -74,19 +74,26 @@ iqwerty.toast = (function() {
 	 */
 	Toast.prototype.DEFAULT_SETTINGS = {
 		style: {
-			"background": "rgba(0, 0, 0, .85)",
-			"box-shadow": "0 0 10px rgba(0, 0, 0, .8)",
-			"z-index": "99999",
-			"border-radius": "3px",
-			"color": "rgba(255, 255, 255, .9)",
-			"padding": "10px 15px",
-			"max-width": "40%",
-			"word-break": "keep-all",
-			"margin": "0 auto",
-			"text-align": "center",
-			"position": "fixed",
-			"left": "0",
-			"right": "0"
+			main: {
+				"background": "rgba(0, 0, 0, .85)",
+				"box-shadow": "0 0 10px rgba(0, 0, 0, .8)",
+
+				"border-radius": "3px",
+
+				"z-index": "99999",
+
+				"color": "rgba(255, 255, 255, .9)",
+				
+				"padding": "10px 15px",
+				"max-width": "40%",
+				"word-break": "keep-all",
+				"margin": "0 auto",
+				"text-align": "center",
+
+				"position": "fixed",
+				"left": "0",
+				"right": "0"
+			}
 		},
 		settings: {
 			duration: 4000
@@ -216,7 +223,7 @@ iqwerty.toast = (function() {
 	 */
 	Toast.prototype.show = function(text, options) {
 		this.initializeStyles();
-		this.generate(text, options.style);
+		this.generate(text, options.style.main);
 		
 		var toastStage = getToastStage();
 		toastStage.classList.add(this.CLASS_TOAST_ANIMATED);
