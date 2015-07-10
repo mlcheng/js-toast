@@ -22,7 +22,6 @@ function showAToast() {
 This shows a toast with default settings
 
 ## Advanced customization
-
 The toast is easy to use, and it looks great by default. However, it can also be customized to your liking.
 
 ### Styles
