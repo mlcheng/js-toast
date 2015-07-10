@@ -31,8 +31,10 @@ The toast style can be customized by specifying a style in the options parameter
 ```javascript
 var options = {
 	style: {
-		background: "pink",
-		color: "black"
+		main: {
+			background: "pink",
+			color: "black"
+		}
 	}
 };
 
