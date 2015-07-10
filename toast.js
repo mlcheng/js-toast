@@ -116,6 +116,14 @@ iqwerty.toast = (function() {
 
 
 	/**
+	 * The Timeout object for animations.
+	 * This should be shared among the Toasts, because timeouts may be cancelled e.g. on explicit call of hide()
+	 * @type {Object}
+	 */
+	Toast.prototype.timeout = null;
+
+
+	/**
 	 * Merge the DEFAULT_SETTINGS with the user defined options if specified
 	 * @param  {Object} options The user defined options
 	 */
@@ -167,18 +175,24 @@ iqwerty.toast = (function() {
 
 	/**
 	 * Generate the Toast with the specified text.
-	 * @param  {String} text    The text to show inside the Toast
+	 * @param  {String|Object} text    The text to show inside the Toast, can be an HTML element or plain text
 	 * @param  {Object} style   The style to set for the Toast
 	 */
 	Toast.prototype.generate = function(text, style) {
 		var toastStage = document.createElement("div");
-		var textStage = document.createTextNode(text);
 
-		toastStage.appendChild(textStage);
+
+		/**
+		 * If the text is a String, create a textNode for appending
+		 */
+		if(typeof text === "string") {
+			text = document.createTextNode(text);
+		}
+		toastStage.appendChild(text);
+
 
 		setToastStage(toastStage);
 		toastStage = null;
-		textStage = null;
 
 		Toast.prototype.stylize(getToastStage(), style);
 	};
@@ -231,7 +245,11 @@ iqwerty.toast = (function() {
 		document.body.insertBefore(toastStage, document.body.firstChild);
 
 
-		toastStage.offsetHeight; // This is a hack to get animations started. Apparently without explicitly redrawing, it'll just attach the class and no animations would be done
+
+		// This is a hack to get animations started. Apparently without explicitly redrawing, it'll just attach the class and no animations would be done
+		toastStage.offsetHeight;
+
+
 
 
 		toastStage.classList.remove(this.CLASS_TOAST_GONE);
@@ -241,7 +259,8 @@ iqwerty.toast = (function() {
 
 
 		// Hide the Toast after the specified time
-		setTimeout(Toast.prototype.hide, options.settings.duration);
+		clearTimeout(Toast.prototype.timeout);
+		Toast.prototype.timeout = setTimeout(Toast.prototype.hide, options.settings.duration);
 	};
 
 
@@ -255,7 +274,8 @@ iqwerty.toast = (function() {
 		toastStage = null;
 
 		// Destroy the Toast element after animations end
-		setTimeout(Toast.prototype.destroy, Toast.prototype.TOAST_ANIMATION_SPEED);
+		clearTimeout(Toast.prototype.timeout);
+		Toast.prototype.timeout = setTimeout(Toast.prototype.destroy, Toast.prototype.TOAST_ANIMATION_SPEED);
 	};
 
 
