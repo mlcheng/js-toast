@@ -28,12 +28,12 @@ iqwerty.toast = (function() {
 				options: options
 			});
 		} else {
-			var options = options == undefined ? {} : options;
-			options = Toast.prototype.mergeOptions(Toast.prototype.DEFAULT_SETTINGS, options);
+			var _options = options || {};
+			_options = Toast.prototype.mergeOptions(Toast.prototype.DEFAULT_SETTINGS, _options);
 
-			Toast.prototype.show(text, options);
+			Toast.prototype.show(text, _options);
 			
-			options = null;
+			_options = null;
 		}
 	};
 
