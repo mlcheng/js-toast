@@ -9,7 +9,7 @@
 
 ***********************************************/
 
-"use strict";
+'use strict';
 
 var iqwerty = iqwerty || {};
 
@@ -21,7 +21,7 @@ iqwerty.toast = (function() {
 	 * @param {Object} options Optional; the Toast options. See Toast.prototype.DEFAULT_SETTINGS for more information
 	 */
 	function Toast(text, options) {
-		if(getToastStage() != null) {
+		if(getToastStage() !== null) {
 			// If there is already a Toast being shown, put this Toast in the queue to show later
 			Toast.prototype.toastQueue.push({
 				text: text,
@@ -63,9 +63,9 @@ iqwerty.toast = (function() {
 	Toast.prototype.TOAST_ANIMATION_SPEED = 400;
 
 	// Toast classes
-	Toast.prototype.CLASS_TOAST_GONE = "iqwerty_toast_gone";
-	Toast.prototype.CLASS_TOAST_VISIBLE = "iqwerty_toast_visible";
-	Toast.prototype.CLASS_TOAST_ANIMATED = "iqwerty_toast_animated";
+	Toast.prototype.CLASS_TOAST_GONE = 'iqwerty_toast_gone';
+	Toast.prototype.CLASS_TOAST_VISIBLE = 'iqwerty_toast_visible';
+	Toast.prototype.CLASS_TOAST_ANIMATED = 'iqwerty_toast_animated';
 
 
 	/**
@@ -75,24 +75,24 @@ iqwerty.toast = (function() {
 	Toast.prototype.DEFAULT_SETTINGS = {
 		style: {
 			main: {
-				"background": "rgba(0, 0, 0, .85)",
-				"box-shadow": "0 0 10px rgba(0, 0, 0, .8)",
+				'background': 'rgba(0, 0, 0, .85)',
+				'box-shadow': '0 0 10px rgba(0, 0, 0, .8)',
 
-				"border-radius": "3px",
+				'border-radius': '3px',
 
-				"z-index": "99999",
+				'z-index': '99999',
 
-				"color": "rgba(255, 255, 255, .9)",
+				'color': 'rgba(255, 255, 255, .9)',
 				
-				"padding": "10px 15px",
-				"max-width": "40%",
-				"word-break": "keep-all",
-				"margin": "0 auto",
-				"text-align": "center",
+				'padding': '10px 15px',
+				'max-width': '40%',
+				'word-break': 'keep-all',
+				'margin': '0 auto',
+				'text-align': 'center',
 
-				"position": "fixed",
-				"left": "0",
-				"right": "0"
+				'position': 'fixed',
+				'left': '0',
+				'right': '0'
 			}
 		},
 		settings: {
@@ -131,7 +131,7 @@ iqwerty.toast = (function() {
 		var merged = customOptions;
 		for(var prop in initialOptions) {
 			if(merged.hasOwnProperty(prop)) {
-				if(initialOptions[prop] != null && initialOptions[prop].constructor == Object) {
+				if(initialOptions[prop] !== null && initialOptions[prop].constructor === Object) {
 					merged[prop] = Toast.prototype.mergeOptions(initialOptions[prop], merged[prop]);
 				}
 			} else {
@@ -149,19 +149,19 @@ iqwerty.toast = (function() {
 	Toast.prototype.initializeStyles = function() {
 		if(Toast.prototype.styleExists) return;
 
-		var style = document.createElement("style");
+		var style = document.createElement('style');
 
-		style.insertAdjacentHTML("beforeend",
+		style.insertAdjacentHTML('beforeend',
 			Toast.prototype.generateInlineStylesheetRules(this.CLASS_TOAST_GONE, {
-				"opacity": "0",
-				"bottom": "-10%"
+				'opacity': '0',
+				'bottom': '-10%'
 			}) +
 			Toast.prototype.generateInlineStylesheetRules(this.CLASS_TOAST_VISIBLE, {
-				"opacity": "1",
-				"bottom": "10%"
+				'opacity': '1',
+				'bottom': '10%'
 			}) +
 			Toast.prototype.generateInlineStylesheetRules(this.CLASS_TOAST_ANIMATED, {
-				"transition": "opacity " + this.TOAST_ANIMATION_SPEED + "ms, bottom " + this.TOAST_ANIMATION_SPEED + "ms"
+				'transition': 'opacity ' + this.TOAST_ANIMATION_SPEED + 'ms, bottom ' + this.TOAST_ANIMATION_SPEED + 'ms'
 			})
 		);
 
@@ -179,13 +179,13 @@ iqwerty.toast = (function() {
 	 * @param  {Object} style   The style to set for the Toast
 	 */
 	Toast.prototype.generate = function(text, style) {
-		var toastStage = document.createElement("div");
+		var toastStage = document.createElement('div');
 
 
 		/**
 		 * If the text is a String, create a textNode for appending
 		 */
-		if(typeof text === "string") {
+		if(typeof text === 'string') {
 			text = document.createTextNode(text);
 		}
 		toastStage.appendChild(text);
@@ -218,13 +218,13 @@ iqwerty.toast = (function() {
 	 * @return {String}              The inline style as a string
 	 */
 	Toast.prototype.generateInlineStylesheetRules = function(elementClass, styles) {
-		var out = "." + elementClass + "{";
+		var out = '.' + elementClass + '{';
 
 		Object.keys(styles).forEach(function(style) {
-			out += style + ":" + styles[style] + ";";
+			out += style + ':' + styles[style] + ';';
 		});
 
-		out += "}";
+		out += '}';
 
 		return out;
 	};
