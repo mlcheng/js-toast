@@ -1,0 +1,28 @@
+{
+  "name": "toast",
+  "version": "1.0.0",
+  "description": "This is a small JavaScript library that produces a toast message. Toasts are small, unobtrusive notifictions to alert the user of something. This toast slides in from the bottom of the page, stays for a specified amount of time, and then slides away. This is much friendlier than using the `alert()` function in JavaScript.",
+  "main": "toast.js",
+  "dependencies": {
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlcheng/js-toast.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mlcheng/js-toast/issues"
+  },
+  "homepage": "https://github.com/mlcheng/js-toast#readme"
+}
