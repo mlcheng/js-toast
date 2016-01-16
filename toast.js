@@ -92,20 +92,17 @@ iqwerty.toast = (function() {
 
 				'position': 'fixed',
 				'left': '0',
-				'right': '0'
+				'right': '0',
+
+				'transform': 'translateY(100vh) translateZ(0)',
+
+				'opacity': '0'
 			}
 		},
 		settings: {
 			duration: 4000
 		}
 	};
-
-
-	/**
-	 * Specifies whether or not the inline style in the <head> exists. It only needs to be added once to a page
-	 * @type {Boolean}
-	 */
-	Toast.prototype.styleExists = false;
 
 
 	/**
@@ -139,37 +136,6 @@ iqwerty.toast = (function() {
 			}
 		}
 		return merged;
-	};
-
-
-	/**
-	 * Add the inline stylesheet to the <head>
-	 * These inline styles are needed for animation purposes.
-	 */
-	Toast.prototype.initializeStyles = function() {
-		if(Toast.prototype.styleExists) return;
-
-		var style = document.createElement('style');
-
-		style.insertAdjacentHTML('beforeend',
-			Toast.prototype.generateInlineStylesheetRules(this.CLASS_TOAST_GONE, {
-				'opacity': '0',
-				'bottom': '-10%'
-			}) +
-			Toast.prototype.generateInlineStylesheetRules(this.CLASS_TOAST_VISIBLE, {
-				'opacity': '1',
-				'bottom': '10%'
-			}) +
-			Toast.prototype.generateInlineStylesheetRules(this.CLASS_TOAST_ANIMATED, {
-				'transition': 'opacity ' + this.TOAST_ANIMATION_SPEED + 'ms, bottom ' + this.TOAST_ANIMATION_SPEED + 'ms'
-			})
-		);
-
-		document.head.appendChild(style);
-		style = null;
-
-		// Notify that the stylesheet exists to avoid creating more
-		Toast.prototype.styleExists = true;
 	};
 
 
@@ -211,37 +177,14 @@ iqwerty.toast = (function() {
 
 
 	/**
-	 * Generates styles to be used in an inline stylesheet. The output will be something like:
-	 * .class {background: blue;}
-	 * @param  {String} elementClass The class of the element to style
-	 * @param  {Object} styles       The style to insert into the inline stylsheet
-	 * @return {String}              The inline style as a string
-	 */
-	Toast.prototype.generateInlineStylesheetRules = function(elementClass, styles) {
-		var out = '.' + elementClass + '{';
-
-		Object.keys(styles).forEach(function(style) {
-			out += style + ':' + styles[style] + ';';
-		});
-
-		out += '}';
-
-		return out;
-	};
-
-
-	/**
 	 * Show the Toast
 	 * @param  {String} text    The text to show inside the Toast
 	 * @param  {Object} options The object containing the options for the Toast
 	 */
 	Toast.prototype.show = function(text, options) {
-		this.initializeStyles();
 		this.generate(text, options.style.main);
 		
 		var toastStage = getToastStage();
-		toastStage.classList.add(this.CLASS_TOAST_ANIMATED);
-		toastStage.classList.add(this.CLASS_TOAST_GONE);
 		document.body.insertBefore(toastStage, document.body.firstChild);
 
 
@@ -249,11 +192,12 @@ iqwerty.toast = (function() {
 		// This is a hack to get animations started. Apparently without explicitly redrawing, it'll just attach the class and no animations would be done
 		toastStage.offsetHeight;
 
+		Toast.prototype.stylize(toastStage, {
+			'transition': 'opacity ' + this.TOAST_ANIMATION_SPEED + 'ms, transform ' + this.TOAST_ANIMATION_SPEED + 'ms',
+			'opacity': '1',
+			'transform': 'translateY(85vh) translateZ(0)'
+		});
 
-
-
-		toastStage.classList.remove(this.CLASS_TOAST_GONE);
-		toastStage.classList.add(this.CLASS_TOAST_VISIBLE);
 
 		var toastStage = null;
 
@@ -269,8 +213,10 @@ iqwerty.toast = (function() {
 	 */
 	Toast.prototype.hide = function() {
 		var toastStage = getToastStage();
-		toastStage.classList.remove(Toast.prototype.CLASS_TOAST_VISIBLE);
-		toastStage.classList.add(Toast.prototype.CLASS_TOAST_GONE);
+		Toast.prototype.stylize(toastStage, {
+			'opacity': '0',
+			'transform': 'translateY(100vh) translateZ(0)'
+		});
 		toastStage = null;
 
 		// Destroy the Toast element after animations end
