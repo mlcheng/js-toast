@@ -95,7 +95,7 @@ iqwerty.toast = (function() {
 				'right': '0',
 
 				'transform': 'translateY(100vh) translateZ(0)',
-
+				'-webkit-filter': 'blur(0)',
 				'opacity': '0'
 			}
 		},
