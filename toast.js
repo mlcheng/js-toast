@@ -62,11 +62,6 @@ iqwerty.toast = (function() {
 	 */
 	Toast.prototype.TOAST_ANIMATION_SPEED = 400;
 
-	// Toast classes
-	Toast.prototype.CLASS_TOAST_GONE = 'iqwerty_toast_gone';
-	Toast.prototype.CLASS_TOAST_VISIBLE = 'iqwerty_toast_visible';
-	Toast.prototype.CLASS_TOAST_ANIMATED = 'iqwerty_toast_animated';
-
 
 	/**
 	 * The default Toast settings
@@ -100,8 +95,26 @@ iqwerty.toast = (function() {
 				'opacity': '0'
 			}
 		},
+
 		settings: {
 			duration: 4000
+		}
+	};
+
+
+	Toast.prototype.Transitions = {
+		SHOW: {
+			'-webkit-transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
+			'transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
+			'opacity': '1',
+			'-webkit-transform': 'translateY(85vh) translateZ(0)',
+			'transform': 'translateY(85vh) translateZ(0)'
+		},
+
+		HIDE: {
+			'opacity': '0',
+			'-webkit-transform': 'translateY(100vh) translateZ(0)',
+			'transform': 'translateY(100vh) translateZ(0)'
 		}
 	};
 
@@ -193,13 +206,8 @@ iqwerty.toast = (function() {
 		// This is a hack to get animations started. Apparently without explicitly redrawing, it'll just attach the class and no animations would be done
 		toastStage.offsetHeight;
 
-		Toast.prototype.stylize(toastStage, {
-			'-webkit-transition': 'opacity ' + this.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + this.TOAST_ANIMATION_SPEED + 'ms',
-			'transition': 'opacity ' + this.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + this.TOAST_ANIMATION_SPEED + 'ms, transform ' + this.TOAST_ANIMATION_SPEED + 'ms',
-			'opacity': '1',
-			'-webkit-transform': 'translateY(85vh) translateZ(0)',
-			'transform': 'translateY(85vh) translateZ(0)'
-		});
+
+		Toast.prototype.stylize(toastStage, Toast.prototype.Transitions.SHOW);
 
 
 		var toastStage = null;
@@ -216,11 +224,7 @@ iqwerty.toast = (function() {
 	 */
 	Toast.prototype.hide = function() {
 		var toastStage = getToastStage();
-		Toast.prototype.stylize(toastStage, {
-			'opacity': '0',
-			'-webkit-transform': 'translateY(100vh) translateZ(0)',
-			'transform': 'translateY(100vh) translateZ(0)'
-		});
+		Toast.prototype.stylize(toastStage, Toast.prototype.Transitions.HIDE);
 		toastStage = null;
 
 		// Destroy the Toast element after animations end
