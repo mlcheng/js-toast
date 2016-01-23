@@ -105,7 +105,7 @@ iqwerty.toast = (function() {
 	Toast.prototype.Transitions = {
 		SHOW: {
 			'-webkit-transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
-			'transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
+			'transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
 			'opacity': '1',
 			'-webkit-transform': 'translateY(85vh) translateZ(0)',
 			'transform': 'translateY(85vh) translateZ(0)'
