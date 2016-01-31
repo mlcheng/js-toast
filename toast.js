@@ -35,7 +35,7 @@ iqwerty.toast = (function() {
 			
 			_options = null;
 		}
-	};
+	}
 
 
 	/**
@@ -46,10 +46,10 @@ iqwerty.toast = (function() {
 	var _toastStage = null;
 	function getToastStage() {
 		return _toastStage;
-	};
+	}
 	function setToastStage(toastStage) {
 		_toastStage = toastStage;
-	};
+	}
 
 
 
@@ -210,7 +210,7 @@ iqwerty.toast = (function() {
 		Toast.prototype.stylize(toastStage, Toast.prototype.Transitions.SHOW);
 
 
-		var toastStage = null;
+		toastStage = null;
 
 
 		// Hide the Toast after the specified time
