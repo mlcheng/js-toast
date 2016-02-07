@@ -88,9 +88,10 @@ iqwerty.toast = (function() {
 				'position': 'fixed',
 				'left': '0',
 				'right': '0',
+				'bottom': '0',
 
-				'-webkit-transform': 'translateY(100vh) translateZ(0)',
-				'transform': 'translateY(100vh) translateZ(0)',
+				'-webkit-transform': 'translateY(150%) translateZ(0)',
+				'transform': 'translateY(150%) translateZ(0)',
 				'-webkit-filter': 'blur(0)',
 				'opacity': '0'
 			}
@@ -107,14 +108,14 @@ iqwerty.toast = (function() {
 			'-webkit-transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
 			'transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
 			'opacity': '1',
-			'-webkit-transform': 'translateY(85vh) translateZ(0)',
-			'transform': 'translateY(85vh) translateZ(0)'
+			'-webkit-transform': 'translateY(-50%) translateZ(0)',
+			'transform': 'translateY(-50%) translateZ(0)'
 		},
 
 		HIDE: {
 			'opacity': '0',
-			'-webkit-transform': 'translateY(100vh) translateZ(0)',
-			'transform': 'translateY(100vh) translateZ(0)'
+			'-webkit-transform': 'translateY(150%) translateZ(0)',
+			'transform': 'translateY(150%) translateZ(0)'
 		}
 	};
 
