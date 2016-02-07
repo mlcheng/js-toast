@@ -108,8 +108,8 @@ iqwerty.toast = (function() {
 			'-webkit-transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
 			'transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
 			'opacity': '1',
-			'-webkit-transform': 'translateY(-50%) translateZ(0)',
-			'transform': 'translateY(-50%) translateZ(0)'
+			'-webkit-transform': 'translateY(-100%) translateZ(0)',
+			'transform': 'translateY(-100%) translateZ(0)'
 		},
 
 		HIDE: {
