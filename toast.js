@@ -15,10 +15,16 @@ var iqwerty = iqwerty || {};
 
 iqwerty.toast = (function() {
 
+	/**
+	 * The Toast animation speed; how long the Toast takes to move to and from the screen
+	 * @type {Number}
+	 */
+	const TOAST_ANIMATION_SPEED = 400;
+
 	const Transitions = {
 		SHOW: {
-			'-webkit-transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
-			'transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
+			'-webkit-transition': 'opacity ' + TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + TOAST_ANIMATION_SPEED + 'ms',
+			'transition': 'opacity ' + TOAST_ANIMATION_SPEED + 'ms, transform ' + TOAST_ANIMATION_SPEED + 'ms',
 			'opacity': '1',
 			'-webkit-transform': 'translateY(-100%) translateZ(0)',
 			'transform': 'translateY(-100%) translateZ(0)'
@@ -73,13 +79,6 @@ iqwerty.toast = (function() {
 
 
 	// define some Toast constants
-	
-	/**
-	 * The Toast animation speed; how long the Toast takes to move to and from the screen
-	 * @type {Number}
-	 */
-	Toast.prototype.TOAST_ANIMATION_SPEED = 400;
-
 
 	/**
 	 * The default Toast settings
@@ -229,11 +228,16 @@ iqwerty.toast = (function() {
 	Toast.prototype.hide = function() {
 		var toastStage = getToastStage();
 		Toast.prototype.stylize(toastStage, Toast.prototype.Transitions.HIDE);
-		toastStage = null;
 
 		// Destroy the Toast element after animations end
 		clearTimeout(Toast.prototype.timeout);
-		Toast.prototype.timeout = setTimeout(Toast.prototype.destroy, Toast.prototype.TOAST_ANIMATION_SPEED);
+		toastStage.addEventListener('transitionend', Toast.prototype.animationListener);
+		toastStage = null;
+	};
+
+	Toast.prototype.animationListener = function() {
+		getToastStage().removeEventListener('transitionend', Toast.prototype.animationListener);
+		Toast.prototype.destroy.call(this);
 	};
 
 
