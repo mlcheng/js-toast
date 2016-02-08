@@ -256,7 +256,7 @@ iqwerty.toast = (function() {
 			// Show the rest of the Toasts in the queue if they exist
 			
 			var toast = Toast.prototype.toastQueue.shift();
-			Toast(toast.text, toast.options);
+			Toast(toast.text, toast.options, Toast.prototype.Transitions);
 
 			// clean up
 			toast = null;
