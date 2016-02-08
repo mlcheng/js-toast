@@ -15,12 +15,30 @@ var iqwerty = iqwerty || {};
 
 iqwerty.toast = (function() {
 
+	const Transitions = {
+		SHOW: {
+			'-webkit-transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
+			'transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
+			'opacity': '1',
+			'-webkit-transform': 'translateY(-100%) translateZ(0)',
+			'transform': 'translateY(-100%) translateZ(0)'
+		},
+
+		HIDE: {
+			'opacity': '0',
+			'-webkit-transform': 'translateY(150%) translateZ(0)',
+			'transform': 'translateY(150%) translateZ(0)'
+		}
+	};
+
 	/**
 	 * The main Toast object
 	 * @param {String} text    The text to put inside the Toast
 	 * @param {Object} options Optional; the Toast options. See Toast.prototype.DEFAULT_SETTINGS for more information
+	 * @param {Object} transitions Optional; the Transitions object. This should not be used unless you know what you're doing
 	 */
-	function Toast(text, options) {
+	function Toast(text, options, transitions) {
+		Toast.prototype.Transitions = transitions || Transitions;
 		if(getToastStage() !== null) {
 			// If there is already a Toast being shown, put this Toast in the queue to show later
 			Toast.prototype.toastQueue.push({
@@ -80,7 +98,7 @@ iqwerty.toast = (function() {
 				'color': 'rgba(255, 255, 255, .9)',
 				
 				'padding': '10px 15px',
-				'max-width': '40%',
+				'max-width': '60%',
 				'word-break': 'keep-all',
 				'margin': '0 auto',
 				'text-align': 'center',
@@ -102,22 +120,7 @@ iqwerty.toast = (function() {
 		}
 	};
 
-
-	Toast.prototype.Transitions = {
-		SHOW: {
-			'-webkit-transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, -webkit-transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
-			'transition': 'opacity ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms, transform ' + Toast.prototype.TOAST_ANIMATION_SPEED + 'ms',
-			'opacity': '1',
-			'-webkit-transform': 'translateY(-100%) translateZ(0)',
-			'transform': 'translateY(-100%) translateZ(0)'
-		},
-
-		HIDE: {
-			'opacity': '0',
-			'-webkit-transform': 'translateY(150%) translateZ(0)',
-			'transform': 'translateY(150%) translateZ(0)'
-		}
-	};
+	Toast.prototype.Transitions = {};
 
 
 	/**
