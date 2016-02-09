@@ -44,14 +44,15 @@ iqwerty.toast = (function() {
 	 * @param {Object} transitions Optional; the Transitions object. This should not be used unless you know what you're doing
 	 */
 	function Toast(text, options, transitions) {
-		Toast.prototype.Transitions = transitions || Transitions;
 		if(getToastStage() !== null) {
 			// If there is already a Toast being shown, put this Toast in the queue to show later
 			Toast.prototype.toastQueue.push({
 				text: text,
-				options: options
+				options: options,
+				transitions: transitions
 			});
 		} else {
+			Toast.prototype.Transitions = transitions || Transitions;
 			var _options = options || {};
 			_options = Toast.prototype.mergeOptions(Toast.prototype.DEFAULT_SETTINGS, _options);
 
@@ -256,7 +257,7 @@ iqwerty.toast = (function() {
 			// Show the rest of the Toasts in the queue if they exist
 			
 			var toast = Toast.prototype.toastQueue.shift();
-			Toast(toast.text, toast.options, Toast.prototype.Transitions);
+			Toast(toast.text, toast.options, toast.transitions);
 
 			// clean up
 			toast = null;
