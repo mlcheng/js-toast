@@ -99,6 +99,7 @@ iqwerty.toast = (function() {
 				
 				'padding': '10px 15px',
 				'max-width': '60%',
+				'width': '100%',
 				'word-break': 'keep-all',
 				'margin': '0 auto',
 				'text-align': 'center',
@@ -268,3 +269,8 @@ iqwerty.toast = (function() {
 		Toast: Toast
 	};
 })();
+
+if(typeof module !== 'undefined') {
+	/* global module */
+	module.exports = iqwerty.toast;
+}
