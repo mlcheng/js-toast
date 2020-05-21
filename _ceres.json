@@ -1,0 +1,10 @@
+{
+	"js": {
+		"bundle": [
+			{
+				"entry": "toast.js",
+				"export": "iqwerty"
+			}
+		]
+	}
+}
